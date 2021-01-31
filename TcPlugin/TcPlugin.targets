@@ -1,0 +1,83 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TargetFramework>net4.7.2</TargetFramework>
+    <AssemblyName>MaFi.WebShareCz.TcPlugin</AssemblyName>
+    <RootNamespace>MaFi.WebShareCz.TcPlugin</RootNamespace>
+    <ApplicationIcon>Resources\WebShareCz.ico</ApplicationIcon>
+    <Description>Total Commander Plugin for access files in private WebShare.cz store.</Description>
+    <PackageProjectUrl>https://github.com/ficnar/WebShareCz.TcPlugin</PackageProjectUrl>
+    <Version>1.0.0</Version>
+    <Authors>Martin Ficnar</Authors>
+    <Company />
+    <PackageLicenseExpression>LGPL-2.1-only</PackageLicenseExpression>
+    <Copyright>Copyright © 2021 Martin Ficnar</Copyright>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\*.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Account.ico" />
+    <None Remove="Resources\Add.ico" />
+    <None Remove="Resources\FolderPrivate.ico" />
+    <None Remove="Resources\FolderPublic.ico" />
+    <None Remove="Resources\WebShareCz.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Account.ico" />
+    <EmbeddedResource Include="Resources\Add.ico" />
+    <EmbeddedResource Include="Resources\FolderPrivate.ico" />
+    <EmbeddedResource Include="Resources\FolderPublic.ico" />
+    <EmbeddedResource Include="Resources\WebShareCz.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TcBuild.ficnar" Version="0.1.24" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\TextResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TextResource.resx</DependentUpon>
+    </Compile>
+    <Compile Update="UI\UserCredentialDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\TextResource.cs.resx">
+      <DependentUpon>TextResource.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\TextResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TextResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="UI\UserCredentialDialog.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  
+</Project>
