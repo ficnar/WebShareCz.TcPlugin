@@ -264,6 +264,14 @@ namespace MaFi.WebShareCz.TcPlugin
             }
         }
 
+        public override PreviewBitmapResult GetPreviewBitmap(RemotePath remoteName, int width, int height)
+        {
+            WsPath sourcePath = remoteName;
+            if (sourcePath.Level == WsPathLevel.Folder && sourcePath.Parent != "/") // Preview for root folder not supported
+                return _accountRepository[sourcePath.AccountName].GetPreviewBitmap(sourcePath, width, height);
+            return base.GetPreviewBitmap(remoteName, width, height);
+        }
+
         private sealed class CancellableProgress : IProgress<int>
         {
             private readonly WsFsPlugin _plugin;

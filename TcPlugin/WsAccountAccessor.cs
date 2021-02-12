@@ -9,6 +9,7 @@ using MaFi.WebShareCz.ApiClient.Entities;
 using TcPluginBase;
 using TcPluginBase.FileSystem;
 using MaFi.WebShareCz.TcPlugin.UI;
+using System.Drawing;
 
 namespace MaFi.WebShareCz.TcPlugin
 {
@@ -18,6 +19,7 @@ namespace MaFi.WebShareCz.TcPlugin
         private readonly TcUIProvider _uiProvider;
         private readonly WsApiClient _apiClient;
         private readonly TcSecretStore _secretStore;
+        private readonly WsFilePreviewCache _filesPreviewCache;
 
         public static bool TryRegisterAccount(WsAccountRepository accountRepository, TcUIProvider uiProvider, WsAccountLoginInfo userCredential, out WsAccountAccessor accountAccessor)
         {
@@ -45,6 +47,7 @@ namespace MaFi.WebShareCz.TcPlugin
             _uiProvider = uiProvider;
             _apiClient = apiClient;
             _secretStore = new TcSecretStore(account, _uiProvider);
+            _filesPreviewCache = new WsFilePreviewCache();
         }
 
         public bool UnRegisterAccount(WsAccountRepository accountRepository)
@@ -67,6 +70,7 @@ namespace MaFi.WebShareCz.TcPlugin
         {
             try
             {
+                _filesPreviewCache.Clear();
                 return ExecuteAsync(folderPath, async () => (IDisposableEnumerable<FindData>)new FolderItems(await _apiClient.GetFolderItems(folderPath.GetFolderPath())));
             }
             catch (OperationCanceledException)
@@ -324,6 +328,45 @@ namespace MaFi.WebShareCz.TcPlugin
             {
                 ShowError("Copy file error", ex, false);
                 return FileSystemExitCode.WriteError;
+            }
+        }
+
+        public PreviewBitmapResult GetPreviewBitmap(WsPath filePath, int width, int height)
+        {
+            try
+            {
+                return ExecuteAsync(filePath, async () =>
+                {
+                    WsFile file = await _apiClient.FindFile(filePath.GetFilePath());
+                    if (file != null)
+                    {
+                        WsFolder folder = await _apiClient.FindFolder(filePath.Parent.GetFolderPath());
+                        if (folder != null)
+                        {
+                            WsFilePreview filePreview = await _filesPreviewCache.FindFilePreview(folder, filePath.Name);
+                            byte[] jpgData = await filePreview.JpgData;
+                            if (jpgData?.Length > 0)
+                            {
+                                using (MemoryStream jpgStream = new MemoryStream(jpgData))
+                                {
+                                    Image jpg = Image.FromStream(jpgStream);
+                                    decimal ratio = (decimal)jpg.Width / jpg.Height;
+                                    if (ratio > 1)
+                                        height = (int)(height / ratio);
+                                    if (ratio < 1)
+                                        width = (int)(width / ratio);
+                                    Bitmap bmp = new Bitmap(jpg, width, height);
+                                    return PreviewBitmapResult.Extracted(bmp, null, false);
+                                }
+                            }
+                        }
+                    }
+                    return PreviewBitmapResult.None;
+                });
+            }
+            catch
+            {
+                return PreviewBitmapResult.None;
             }
         }
 

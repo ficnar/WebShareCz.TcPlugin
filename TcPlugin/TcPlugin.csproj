@@ -2,7 +2,7 @@
   <Import Project="TcPlugin.targets" />
 
   <ItemGroup>
-    <PackageReference Include="MaFi.WebShareCz.ApiClient" Version="1.0.0" />
+    <PackageReference Include="MaFi.WebShareCz.ApiClient" Version="1.1.0" />
   </ItemGroup>
 
 </Project>
