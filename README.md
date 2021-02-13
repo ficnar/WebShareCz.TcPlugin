@@ -7,6 +7,9 @@ MaFi.WebShareCz.TcPlugin is a Total Commander FileSystem `.wfx` plugin for acces
 
 ## Installation 
 
+Plugin required [**.NET Framework 4.7.2**](https://dotnet.microsoft.com/download/dotnet-framework) or newer installed in Windows.
+By default is it pre-installed by system on Windows 10 (1803, April 2018) and newer.
+
 To install the Plugin, using integrated plugin installer, do the following:
  * Download the latest Release [**MaFi.WebShareCz.TcPlugin.zip**](https://github.com/ficnar/WebShareCz.TcPlugin/releases)
  * Use Total Commander to navigate to the zip-file and then hit `ENTER` on it.
