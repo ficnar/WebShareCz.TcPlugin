@@ -71,7 +71,7 @@ namespace MaFi.WebShareCz.TcPlugin
             try
             {
                 _filesPreviewCache.Clear();
-                return ExecuteAsync(folderPath, async () => (IDisposableEnumerable<FindData>)new FolderItems(await _apiClient.GetFolderItems(folderPath.GetFolderPath())));
+                return ExecuteAsync(folderPath, async () => (IDisposableEnumerable<FindData>)new FolderItems(await _apiClient.GetFolderItems(folderPath.GetFolderPath())), false);
             }
             catch (OperationCanceledException)
             {
@@ -382,7 +382,7 @@ namespace MaFi.WebShareCz.TcPlugin
             }
         }
 
-        private T ExecuteAsync<T>(WsPath path, Func<Task<T>> asyncFunc)
+        private T ExecuteAsync<T>(WsPath path, Func<Task<T>> asyncFunc, bool showFileNotFoundException = true)
         {
             using (ThreadKeeper exec = new ThreadKeeper())
             {
@@ -404,7 +404,8 @@ namespace MaFi.WebShareCz.TcPlugin
                     }
                     catch (FileNotFoundException)
                     {
-                        ShowError($"Path {path} not found.", null, false);
+                        if (showFileNotFoundException)
+                            ShowError($"Path {path} not found.", null, false);
                         return default(T);
                     }
                     catch (DirectoryNotFoundException)

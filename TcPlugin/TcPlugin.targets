@@ -6,11 +6,11 @@
     <ApplicationIcon>Resources\WebShareCz.ico</ApplicationIcon>
     <Description>Total Commander Plugin for access files in private WebShare.cz store.</Description>
     <PackageProjectUrl>https://github.com/ficnar/WebShareCz.TcPlugin</PackageProjectUrl>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <Authors>Martin Ficnar</Authors>
     <Company />
     <PackageLicenseExpression>LGPL-2.1-only</PackageLicenseExpression>
-    <Copyright>Copyright © 2021 Martin Ficnar</Copyright>
+    <Copyright>Copyright © 2023 Martin Ficnar</Copyright>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
